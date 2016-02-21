@@ -1,0 +1,5 @@
+# Vim temp files
+.*.sw[a-z]
+
+# Sensitive information
+sms.conf

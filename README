@@ -1,0 +1,32 @@
+	Motivation:
+I've found only one working script for sending multifon SMS: https://github.com/vir/yate/wiki/Multifon-sms
+The main problem is it's based on heavy project YATE. It was need simpler solution.
+
+	Thanks:
+To author of YATE multifon-sms script for information about specific headers.
+
+1.Install patched version of sipsak
+	git clone https://github.com/wolandtel/sipsak.git
+	cd sipsak
+	debuild -b -uc -us
+	cd ..
+	sudo dpkg -i sipsak_*-fox-*.deb
+
+2. Copy sms.conf.sample to sms.conf and fill it with your phone number and multifon password
+
+3. Send message
+	./sms.sh 79aabbccddd "test message"
+	./sms.sh 79aabbccddd "$(echo -en "Multiline\ntest message")"
+	./sms.sh 79aabbccddd "$(echo -en "Тестовое сообщение\nв несколько строк")"
+
+4. Debugging
+	add line DEBUG=1 to sms.conf
+	it's recomended to add '> sms.log 2> sms.err' to messsage command line while debug enabled
+
+5. Troubleshooting
+	If you receive 403 Forbidden:
+	1. Check your credentials
+	2. Enable debugging and look at Via: header of sending message. If it contains 10.x.x.x, 192.168.x.x, 172.16.x.x – 172.31.x.x,
+		you have NAT and unroutable address on your interface. It's impossible to send SMS in such environment now.
+	
+	!!Message contents MUST be UTF-8 endoded.
