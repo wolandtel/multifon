@@ -36,4 +36,12 @@ to=sip:+$to@sms.$domain
 
 [ -n "$DEBUG" ] && DEBUG=" -vvv"
 
-sipsak -E tcp -p $proxy -u $user -a $password -j "$headers" -MB "$message" -c $from -s $to$DEBUG
+# sipsak -E tcp -p $proxy -u $user -a $password -j "$headers" -MB "$message" -c $from -s $to$DEBUG
+
+dummy=$(curl "https://emotion.megalabs.ru/api/v15/login" --data '{"msisdn":"${user}","password":"${password}"}' -c ./${user}.pechenka -b ./${user].pechenka)
+if [ !-f "./${user].pechenka" ]; then
+echo "Incorrect username/password"
+else 
+curl -c ./${user}.pechenka -b ./${user].pechenka "https://emotion.megalabs.ru/api/v15/msg" --data "<sendSMSParam><attime></attime><cpId></cpId><dlvType>0</dlvType><dispType>0</dispType><flashflag>0</flashflag><ctn>${text}</ctn><recver length=\"1\"><item>${to}</item></recver><sender>${user}</sender><serviceType></serviceType><sign></sign><smstype>1</smstype><type>0</type></sendSMSParam>"
+echo "sent, please, check"
+fi
